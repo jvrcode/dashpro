@@ -9,7 +9,7 @@ import os
 
 app = Flask(__name__)
 
-def generate_sample_data():
+def generate_sample_data(week_filter='all'):
     """Load performance data from Excel file or use fallback sample data"""
     
     # For Railway: Excel file won't exist, so use sample data
@@ -29,11 +29,29 @@ def generate_sample_data():
         # Clean and transform the data
         df_clean = df.dropna(how='all')
         
-        # FILTER: Show only last 7 days of data
-        if len(df_clean) > 0 and 'Date' in df_clean.columns:
-            recent_date = df_clean['Date'].max()
-            df_clean = df_clean[df_clean['Date'] >= (recent_date - pd.Timedelta(days=30))]
-            print(f"   Filtered to last 7 days (from {recent_date - pd.Timedelta(days=7)} to {recent_date})")
+        # Apply week filter if specified
+        if week_filter != 'all' and len(df_clean) > 0 and 'Date' in df_clean.columns:
+            # Parse week_filter (format: "2026-W04" means week 4 of 2026)
+            try:
+                year, week = week_filter.split('-W')
+                year = int(year)
+                week_num = int(week)
+                
+                # Calculate start (Sunday) and end (Saturday) of the week
+                # ISO week starts on Monday, but we want Sunday-Saturday
+                jan_1 = pd.Timestamp(year, 1, 1)
+                # Find the first Sunday of the year
+                days_to_sunday = (6 - jan_1.weekday()) % 7
+                first_sunday = jan_1 + pd.Timedelta(days=days_to_sunday)
+                
+                # Calculate the Sunday of the requested week
+                week_start = first_sunday + pd.Timedelta(weeks=week_num - 1)
+                week_end = week_start + pd.Timedelta(days=6)  # Saturday
+                
+                df_clean = df_clean[(df_clean['Date'] >= week_start) & (df_clean['Date'] <= week_end)]
+                print(f"   Filtered to week {week_num} (from {week_start.date()} to {week_end.date()})")
+            except Exception as e:
+                print(f"   Warning: Could not parse week filter: {e}")
         
         processed_data = []
         
@@ -176,12 +194,65 @@ def calculate_performance_score(row):
 def index():
     return render_template('index.html')
 
+@app.route('/api/available-weeks')
+def get_available_weeks():
+    """Get list of available weeks from the data"""
+    excel_path = "performance_data.xlsx"
+    
+    if not os.path.exists(excel_path):
+        # Return sample weeks
+        return jsonify({'weeks': []})
+    
+    try:
+        df = pd.read_excel(excel_path, sheet_name='at machine reporting')
+        df_clean = df.dropna(how='all')
+        
+        if 'Date' not in df_clean.columns:
+            return jsonify({'weeks': []})
+        
+        # Get unique weeks from the data
+        df_clean['Date'] = pd.to_datetime(df_clean['Date'])
+        df_clean = df_clean.dropna(subset=['Date'])
+        
+        # Calculate week numbers (Sunday start)
+        weeks = []
+        for date in df_clean['Date'].unique():
+            # Find the Sunday of this week
+            date_ts = pd.Timestamp(date)
+            days_since_sunday = (date_ts.weekday() + 1) % 7
+            week_start = date_ts - pd.Timedelta(days=days_since_sunday)
+            
+            # Calculate week number
+            jan_1 = pd.Timestamp(week_start.year, 1, 1)
+            days_to_sunday = (6 - jan_1.weekday()) % 7
+            first_sunday = jan_1 + pd.Timedelta(days=days_to_sunday)
+            week_num = ((week_start - first_sunday).days // 7) + 1
+            
+            week_id = f"{week_start.year}-W{week_num:02d}"
+            week_label = f"Week {week_num} ({week_start.strftime('%b %d')} - {(week_start + pd.Timedelta(days=6)).strftime('%b %d, %Y')})"
+            
+            weeks.append({
+                'id': week_id,
+                'label': week_label,
+                'start': week_start.strftime('%Y-%m-%d')
+            })
+        
+        # Remove duplicates and sort
+        weeks_df = pd.DataFrame(weeks).drop_duplicates(subset=['id']).sort_values('start', ascending=False)
+        
+        return jsonify({'weeks': weeks_df.to_dict('records')})
+        
+    except Exception as e:
+        print(f"Error getting weeks: {e}")
+        return jsonify({'weeks': []})
+
 @app.route('/api/performance-data')
 def get_performance_data():
     """API endpoint to fetch performance data"""
     shift_filter = request.args.get('shift', 'all')
+    week_filter = request.args.get('week', 'all')
     
-    df = generate_sample_data()
+    df = generate_sample_data(week_filter=week_filter)
     
     # Filter by shift if specified
     if shift_filter != 'all':
@@ -221,7 +292,8 @@ def get_performance_data():
 @app.route('/api/charts')
 def get_charts():
     """Generate chart data for visualization"""
-    df = generate_sample_data()
+    week_filter = request.args.get('week', 'all')
+    df = generate_sample_data(week_filter=week_filter)
     df['performance_score'] = df.apply(calculate_performance_score, axis=1)
     
     # Productivity by operator chart
