@@ -1,8 +1,9 @@
-// Atlanta Plant Performance Dashboard - JavaScript
+// Atlanta Plant Performance Dashboard - JavaScript with Week Filter
 
 // Initialize dashboard
 document.addEventListener('DOMContentLoaded', function() {
     updateDateTime();
+    loadAvailableWeeks();
     loadData();
     
     // Update date/time every minute
@@ -23,13 +24,38 @@ function updateDateTime() {
     document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', options);
 }
 
+// Load available weeks from data
+async function loadAvailableWeeks() {
+    try {
+        const response = await fetch('/api/available-weeks');
+        const data = await response.json();
+        
+        const weekSelect = document.getElementById('week-filter');
+        
+        // Clear existing options except "All Weeks"
+        weekSelect.innerHTML = '<option value="all">All Weeks</option>';
+        
+        // Add week options
+        data.weeks.forEach(week => {
+            const option = document.createElement('option');
+            option.value = week.id;
+            option.textContent = week.label;
+            weekSelect.appendChild(option);
+        });
+        
+    } catch (error) {
+        console.error('Error loading weeks:', error);
+    }
+}
+
 // Load performance data
 async function loadData() {
     const shiftFilter = document.getElementById('shift-filter').value;
+    const weekFilter = document.getElementById('week-filter').value;
     
     try {
         // Fetch performance data
-        const response = await fetch(`/api/performance-data?shift=${shiftFilter}`);
+        const response = await fetch(`/api/performance-data?shift=${shiftFilter}&week=${weekFilter}`);
         const data = await response.json();
         
         // Update KPIs
@@ -180,8 +206,10 @@ function updateShiftBreakdown(shiftAverages) {
 
 // Load charts
 async function loadCharts() {
+    const weekFilter = document.getElementById('week-filter').value;
+    
     try {
-        const response = await fetch('/api/charts');
+        const response = await fetch(`/api/charts?week=${weekFilter}`);
         const data = await response.json();
         
         // Render productivity chart
