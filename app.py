@@ -32,7 +32,7 @@ def generate_sample_data():
         # FILTER: Show only last 7 days of data
         if len(df_clean) > 0 and 'Date' in df_clean.columns:
             recent_date = df_clean['Date'].max()
-            df_clean = df_clean[df_clean['Date'] >= (recent_date - pd.Timedelta(days=30))]
+            df_clean = df_clean[df_clean['Date'] >= (recent_date - pd.Timedelta(days=7))]
             print(f"   Filtered to last 7 days (from {recent_date - pd.Timedelta(days=7)} to {recent_date})")
         
         processed_data = []
@@ -225,24 +225,39 @@ def get_charts():
     df['performance_score'] = df.apply(calculate_performance_score, axis=1)
     
     # Productivity by operator chart
+    df_prod_sorted = df.sort_values('productivity', ascending=False)
     fig_productivity = go.Figure(data=[
         go.Bar(
-            x=df.sort_values('productivity', ascending=False)['operator'],
-            y=df.sort_values('productivity', ascending=False)['productivity'],
+            x=df_prod_sorted['operator'],
+            y=df_prod_sorted['productivity'],
             marker_color=['#00C853' if x >= 90 else '#FF6B35' if x < 85 else '#FFA726' 
-                          for x in df.sort_values('productivity', ascending=False)['productivity']],
-            text=df.sort_values('productivity', ascending=False)['productivity'],
-            textposition='auto',
+                          for x in df_prod_sorted['productivity']],
+            text=[f"{x:.1f}%" for x in df_prod_sorted['productivity']],
+            textposition='outside',
+            textfont=dict(size=11, color='#333333'),
+            hovertemplate='<b>%{x}</b><br>Productivity: %{y:.1f}%<extra></extra>',
         )
     ])
     fig_productivity.update_layout(
-        title='Productivity by Operator (%)',
+        title={
+            'text': 'Productivity by Operator (%)',
+            'font': {'size': 16, 'color': '#333333'}
+        },
         xaxis_title='Operator',
         yaxis_title='Productivity %',
-        height=400,
+        xaxis={
+            'tickangle': -45,
+            'tickfont': {'size': 10}
+        },
+        yaxis={
+            'range': [0, max(df_prod_sorted['productivity']) * 1.15]  # Add 15% padding for text
+        },
+        height=450,
+        margin=dict(b=100, t=60),
         plot_bgcolor='rgba(0,0,0,0)',
         paper_bgcolor='rgba(0,0,0,0)',
-        font=dict(color='#333333')
+        font=dict(color='#333333'),
+        showlegend=False
     )
     
     # Performance score comparison
@@ -253,18 +268,32 @@ def get_charts():
             y=df_sorted['performance_score'],
             marker_color=['#00C853' if i < 5 else '#FF6B35' if i >= len(df_sorted) - 5 
                           else '#2196F3' for i in range(len(df_sorted))],
-            text=df_sorted['performance_score'],
-            textposition='auto',
+            text=[f"{x:.1f}" for x in df_sorted['performance_score']],
+            textposition='outside',
+            textfont=dict(size=11, color='#333333'),
+            hovertemplate='<b>%{x}</b><br>Score: %{y:.1f}<extra></extra>',
         )
     ])
     fig_performance.update_layout(
-        title='Overall Performance Score by Operator',
+        title={
+            'text': 'Overall Performance Score by Operator',
+            'font': {'size': 16, 'color': '#333333'}
+        },
         xaxis_title='Operator',
         yaxis_title='Performance Score',
-        height=400,
+        xaxis={
+            'tickangle': -45,
+            'tickfont': {'size': 10}
+        },
+        yaxis={
+            'range': [0, max(df_sorted['performance_score']) * 1.15]  # Add 15% padding for text
+        },
+        height=450,
+        margin=dict(b=100, t=60),
         plot_bgcolor='rgba(0,0,0,0)',
         paper_bgcolor='rgba(0,0,0,0)',
-        font=dict(color='#333333')
+        font=dict(color='#333333'),
+        showlegend=False
     )
     
     return jsonify({
