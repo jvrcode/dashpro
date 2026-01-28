@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atlanta Plant Performance Dashboard - Supacolor</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="header-text">
+                    <h1>🎨 Supacolor Atlanta Plant</h1>
+                    <h2>Printing Floor Performance Dashboard</h2>
+                    <div class="header-meta">
+                        <span id="current-date"></span>
+                        <span class="divider">|</span>
+                        <span>Plant Manager: Javier Archila</span>
+                    </div>
+                </div>
+                <div class="header-logo">
+                    <img src="/static/logo.png" alt="Supacolor Logo">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Filter Section -->
+        <section class="filter-section">
+            <div class="filter-card">
+                <label for="shift-filter">Filter by Shift:</label>
+                <select id="shift-filter" onchange="loadData()">
+                    <option value="all">All Shifts</option>
+                    <option value="1st Shift">1st Shift</option>
+                    <option value="2nd Shift">2nd Shift</option>
+                    <option value="3rd Shift">3dr Shift</option>
+                </select>
+                <button onclick="loadData()" class="refresh-btn">🔄 Refresh Data</button>
+            </div>
+        </section>
+
+        <!-- KPI Overview -->
+        <section class="kpi-section">
+            <h3>Plant-Wide Averages</h3>
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-icon">📊</div>
+                    <div class="kpi-value" id="avg-productivity">--</div>
+                    <div class="kpi-label">Avg Productivity</div>
+                    <div class="kpi-target">Target: 90%</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon">✅</div>
+                    <div class="kpi-value" id="avg-quality">--</div>
+                    <div class="kpi-label">Avg Quality Rate</div>
+                    <div class="kpi-target">Target: 98%</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon">⏱️</div>
+                    <div class="kpi-value" id="avg-setup">--</div>
+                    <div class="kpi-label">Avg Setup Time</div>
+                    <div class="kpi-target">Target: 3 min</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon">🏆</div>
+                    <div class="kpi-value" id="avg-score">--</div>
+                    <div class="kpi-label">Avg Performance Score</div>
+                    <div class="kpi-target">Max: 100</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Top Performers -->
+        <section class="performers-section">
+            <div class="performers-container">
+                <div class="performers-card top-performers">
+                    <h3>🌟 Top 5 Performers</h3>
+                    <div id="top-performers-list" class="performers-list">
+                        <p class="loading">Loading...</p>
+                    </div>
+                </div>
+
+                <!-- Bottom Performers -->
+                <div class="performers-card bottom-performers">
+                    <h3>⚠️ Needs Support</h3>
+                    <div id="bottom-performers-list" class="performers-list">
+                        <p class="loading">Loading...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Charts Section -->
+        <section class="charts-section">
+            <div class="chart-container">
+                <div id="productivity-chart" class="chart"></div>
+            </div>
+            <div class="chart-container">
+                <div id="performance-chart" class="chart"></div>
+            </div>
+        </section>
+
+        <!-- All Operators Table -->
+        <section class="table-section">
+            <h3>All Operators - Detailed View</h3>
+            <div class="table-container">
+                <table id="operators-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Operator</th>
+                            <th>Shift</th>
+                            <th>Line</th>
+                            <th>Productivity %</th>
+                            <th>Quality %</th>
+                            <th>Setup Time (min)</th>
+                            <th>Jobs Completed</th>
+                            <th>Downtime (min)</th>
+                            <th>Performance Score</th>
+                        </tr>
+                    </thead>
+                    <tbody id="operators-tbody">
+                        <tr><td colspan="10" class="loading">Loading data...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Shift Breakdown -->
+        <section class="shift-section">
+            <h3>Performance by Shift</h3>
+            <div id="shift-breakdown" class="shift-grid">
+                <p class="loading">Loading...</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Supacolor - The World's #1 Heat Transfer Brand | Atlanta Plant</p>
+            <p class="footer-tagline">Supafast. Supaeasy. Supacolor.</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/script.js"></script>
+</body>
+</html>

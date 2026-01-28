@@ -1,0 +1,505 @@
+/* Supacolor Atlanta Plant Performance Dashboard Styles */
+
+:root {
+    --primary-color: #FF6B35;
+    --secondary-color: #2196F3;
+    --success-color: #00C853;
+    --warning-color: #FFA726;
+    --danger-color: #F44336;
+    --dark-bg: #1a1a1a;
+    --light-bg: #f5f5f5;
+    --card-bg: #ffffff;
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --border-color: #e0e0e0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header */
+header {
+    background: #000000;
+    color: white;
+    padding: 25px 0;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    margin-bottom: 30px;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-text {
+    flex: 1;
+}
+
+.header-content h1 {
+    font-size: 2.2em;
+    margin-bottom: 5px;
+    font-weight: 700;
+    color: white;
+}
+
+.header-content h2 {
+    font-size: 1.2em;
+    font-weight: 400;
+    opacity: 0.95;
+    color: white;
+}
+
+.header-logo {
+    height: 80px;
+    margin-left: 30px;
+}
+
+.header-logo img {
+    height: 100%;
+    width: auto;
+}
+
+.header-meta {
+    margin-top: 10px;
+    font-size: 0.95em;
+    opacity: 0.9;
+    color: white;
+}
+
+.divider {
+    margin: 0 15px;
+}
+
+/* Filter Section */
+.filter-section {
+    margin-bottom: 30px;
+}
+
+.filter-card {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.filter-card label {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.filter-card select {
+    padding: 10px 15px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-card select:hover,
+.filter-card select:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+.refresh-btn {
+    padding: 10px 20px;
+    background: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: auto;
+}
+
+.refresh-btn:hover {
+    background: #1976D2;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* KPI Section */
+.kpi-section {
+    margin-bottom: 30px;
+}
+
+.kpi-section h3 {
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    font-size: 1.5em;
+}
+
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.kpi-card {
+    background: var(--card-bg);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.kpi-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+.kpi-icon {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.kpi-value {
+    font-size: 2.5em;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 10px 0;
+}
+
+.kpi-label {
+    font-size: 1.1em;
+    color: var(--text-secondary);
+    margin-bottom: 5px;
+}
+
+.kpi-target {
+    font-size: 0.9em;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+/* Performers Section */
+.performers-section {
+    margin-bottom: 30px;
+}
+
+.performers-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.performers-card {
+    background: var(--card-bg);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.performers-card h3 {
+    margin-bottom: 20px;
+    font-size: 1.4em;
+    padding-bottom: 15px;
+    border-bottom: 3px solid var(--border-color);
+}
+
+.top-performers h3 {
+    color: var(--success-color);
+    border-bottom-color: var(--success-color);
+}
+
+.bottom-performers h3 {
+    color: var(--danger-color);
+    border-bottom-color: var(--danger-color);
+}
+
+.performers-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.performer-item {
+    display: grid;
+    grid-template-columns: 40px 1fr auto;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.performer-item:hover {
+    background: var(--light-bg);
+    transform: translateX(5px);
+}
+
+.performer-rank {
+    font-size: 1.5em;
+    font-weight: 700;
+    text-align: center;
+}
+
+.top-performers .performer-rank {
+    color: var(--success-color);
+}
+
+.bottom-performers .performer-rank {
+    color: var(--danger-color);
+}
+
+.performer-info h4 {
+    font-size: 1.1em;
+    margin-bottom: 5px;
+    color: var(--text-primary);
+}
+
+.performer-details {
+    font-size: 0.9em;
+    color: var(--text-secondary);
+}
+
+.performer-score {
+    font-size: 1.8em;
+    font-weight: 700;
+    text-align: center;
+}
+
+.top-performers .performer-score {
+    color: var(--success-color);
+}
+
+.bottom-performers .performer-score {
+    color: var(--danger-color);
+}
+
+/* Charts Section */
+.charts-section {
+    margin-bottom: 30px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.chart-container {
+    background: var(--card-bg);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.chart {
+    width: 100%;
+    min-height: 400px;
+}
+
+/* Table Section */
+.table-section {
+    margin-bottom: 30px;
+}
+
+.table-section h3 {
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    font-size: 1.5em;
+}
+
+.table-container {
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+   /* background: linear-gradient(135deg, var(--primary-color) 0%, #ff8c61 100%);
+    color: white; */
+
+    background: #000000;
+    color: white;
+}
+
+thead th {
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.95em;
+}
+
+tbody tr {
+    border-bottom: 1px solid var(--border-color);
+    transition: background 0.3s ease;
+}
+
+tbody tr:hover {
+    background: var(--light-bg);
+}
+
+tbody td {
+    padding: 15px;
+    font-size: 0.95em;
+}
+
+.rank-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.9em;
+}
+
+.rank-top {
+    background: var(--success-color);
+    color: white;
+}
+
+.rank-bottom {
+    background: var(--danger-color);
+    color: white;
+}
+
+.rank-middle {
+    background: var(--secondary-color);
+    color: white;
+}
+
+.metric-good {
+    color: var(--success-color);
+    font-weight: 600;
+}
+
+.metric-warning {
+    color: var(--warning-color);
+    font-weight: 600;
+}
+
+.metric-bad {
+    color: var(--danger-color);
+    font-weight: 600;
+}
+
+/* Shift Section */
+.shift-section {
+    margin-bottom: 30px;
+}
+
+.shift-section h3 {
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    font-size: 1.5em;
+}
+
+.shift-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.shift-card {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-left: 5px solid var(--secondary-color);
+}
+
+.shift-card h4 {
+    font-size: 1.3em;
+    margin-bottom: 15px;
+    color: var(--text-primary);
+}
+
+.shift-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.shift-metric {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.shift-metric:last-child {
+    border-bottom: none;
+}
+
+.shift-metric-label {
+    color: var(--text-secondary);
+    font-size: 0.95em;
+}
+
+.shift-metric-value {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Footer */
+footer {
+    background: var(--dark-bg);
+    color: white;
+    text-align: center;
+    padding: 25px 0;
+    margin-top: 50px;
+}
+
+footer p {
+    margin: 5px 0;
+}
+
+.footer-tagline {
+    font-style: italic;
+    opacity: 0.8;
+    font-size: 0.95em;
+}
+
+/* Loading State */
+.loading {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .performers-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .header-content h1 {
+        font-size: 1.6em;
+    }
+    
+    .kpi-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .table-container {
+        overflow-x: scroll;
+    }
+}
