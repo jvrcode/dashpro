@@ -54,9 +54,9 @@ def generate_sample_data(week_filter='all'):
                 print(f"   Warning: Could not parse week filter: {e}")
         elif len(df_clean) > 0 and 'Date' in df_clean.columns:
             # When "All Weeks" is selected, show all data from 2025 onwards
-            df_clean['Date'] = pd.to_datetime(df_clean['Date'])
             start_date = pd.Timestamp('2025-01-01')
-            df_clean = df_clean[df_clean['Date'] >= start_date]
+            df_clean = df_clean[df_clean['Date'] >= start_date].copy()
+            df_clean['Date'] = pd.to_datetime(df_clean['Date'])
             print(f"   Showing all data from {start_date.date()} onwards ({len(df_clean)} rows)")
         
         processed_data = []
