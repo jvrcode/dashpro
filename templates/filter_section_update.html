@@ -1,0 +1,20 @@
+        <!-- Filter Section -->
+        <section class="filter-section">
+            <div class="filter-card">
+                <label for="week-filter">Filter by Week:</label>
+                <select id="week-filter" onchange="loadData()">
+                    <option value="all">All Weeks</option>
+                    <!-- Weeks will be populated dynamically -->
+                </select>
+                
+                <label for="shift-filter">Filter by Shift:</label>
+                <select id="shift-filter" onchange="loadData()">
+                    <option value="all">All Shifts</option>
+                    <option value="1st Shift">1st Shift</option>
+                    <option value="2nd Shift">2nd Shift</option>
+                    <option value="3rd Shift">3rd Shift</option>
+                </select>
+                
+                <button onclick="loadData()" class="refresh-btn">🔄 Refresh Data</button>
+            </div>
+        </section>
