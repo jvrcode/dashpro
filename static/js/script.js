@@ -43,6 +43,9 @@ async function loadAvailableWeeks() {
             weekSelect.appendChild(option);
         });
         
+        // Ensure "All Weeks" is selected by default
+        weekSelect.value = 'all';
+        
     } catch (error) {
         console.error('Error loading weeks:', error);
     }
