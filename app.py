@@ -32,7 +32,7 @@ def generate_sample_data():
         # FILTER: Show only last 7 days of data
         if len(df_clean) > 0 and 'Date' in df_clean.columns:
             recent_date = df_clean['Date'].max()
-            df_clean = df_clean[df_clean['Date'] >= (recent_date - pd.Timedelta(days=7))]
+            df_clean = df_clean[df_clean['Date'] >= (recent_date - pd.Timedelta(days=30))]
             print(f"   Filtered to last 7 days (from {recent_date - pd.Timedelta(days=7)} to {recent_date})")
         
         processed_data = []
