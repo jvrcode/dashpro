@@ -1,6 +1,6 @@
-# Atlanta Plant Performance Dashboard
+# Performance Dashboard
 
-A web-based performance tracking dashboard for Supacolor's Atlanta printing floor.
+A web-based performance tracking dashboard.
 
 ## 🚀 Live Demo
 
